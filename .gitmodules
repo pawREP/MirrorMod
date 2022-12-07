@@ -1,0 +1,6 @@
+[submodule "thirdparty/B3L"]
+	path = thirdparty/B3L
+	url = https://github.com/pawREP/B3L.git
+[submodule "thirdparty/json"]
+	path = thirdparty/json
+	url = https://github.com/nlohmann/json.git
