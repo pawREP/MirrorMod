@@ -1,4 +1,4 @@
-<div style="float: left; margin:0px 12px"><img src="assets/icon.png" width="20" /></div> 
+<img align="left" width="45" src="assets/icon.png" alt="Resume application project app icon">
 
 # Universal Souls Mirror Mod
 
@@ -8,15 +8,15 @@ This mod allows you to play recent From Software titles on a mirrored map.
 
 | Game                  | Support   | Notes                                        |
 | ------                | ---       | ------                                       |
-| Elden Ring            | [x]       | Full support                                 |
-| Sekiro                | []        | Currently no support but planned.            |
-| Dark Souls III        | []        | Building from source temporarily unsupported |
-| Dark Souls II Sotfs   | []        | Building from source temporarily unsupported |
-| Dark Souls II         | []        | Building from source temporarily unsupported |
-| Dark Souls Remastered | []        | Building from source temporarily unsupported | 
-| Dark Souls Ptde       | []        | No current or planned support                | 
-| Demon's Souls         | []        | No current or planned support                | 
-| Bloodborne            | []        | No current or planned support                | 
+| Elden Ring            | :heavy_check_mark:        | Full support                                 |
+| Sekiro                | :heavy_minus_sign:        | Currently no support but planned            |
+| Dark Souls III        | :heavy_minus_sign:        | Building from source temporarily unsupported |
+| Dark Souls II Sotfs   | :heavy_minus_sign:        | Building from source temporarily unsupported |
+| Dark Souls II         | :heavy_minus_sign:        | Building from source temporarily unsupported |
+| Dark Souls Remastered | :heavy_minus_sign:        | Building from source temporarily unsupported | 
+| Dark Souls Ptde       | :x:                       | No current or planned support                | 
+| Demon's Souls         | :x:                       | No current or planned support                | 
+| Bloodborne            | :x:                       | No current or planned support                | 
 
 ## Build instructions:
  ### DINPUT8.dll / MirrorMod.dll:
