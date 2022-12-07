@@ -1,0 +1,70 @@
+# Root configuration file to build mirrorMod.json from.
+
+---
+EldenRing.exe: &elden_ring
+  Version:
+    0x632AF7A8: &latest v1.07  #current patch as of 22/12/01
+    latest: *latest
+
+  Configuration:
+    v1.07: &v1_07
+      EnemyHPBarPatch:
+        Type: InlinePatch
+        Pattern: F3 0F 11 54 24 ?? F3 0F 11 4C 24 ?? F3 0F 11 6C 24 ?? 33 C0 89 44 24 ?? 48 8D 73 ?? 0F 28 44 24
+        Offset: 0x00
+        Assembly: |
+          push rax
+          movabs rax, 0x780
+          cvtsi2ss xmm0, rax
+          subss xmm0, xmm2
+          movss xmm2, xmm0
+          pop rax
+
+      LockonPatch:
+        Type: InlinePatch
+        Pattern: F3 0F 11 55 F7 F3 0F 59 C8 F3 0F 11 55 97 F3 0F
+        Offset: 0x00
+        Assembly: |
+          push rax
+          movabs rax, 0x780
+          cvtsi2ss xmm6, rax
+          subss xmm6, xmm2
+          movss xmm2, xmm6
+          pop rax
+
+      MenuState:
+        Type: DeepPointer
+        Pattern: &CSMenuManPattern 
+          Bytes: 48 8B 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 0F B6 CB BB 01 00 00 00 
+          Offset: 3
+        Offsets: [ 0x1C ] #0x3C51360
+
+      IsInGame:
+        Type: DeepPointer
+        Pattern: *CSMenuManPattern
+        Offsets: [ 0x1A ]
+
+start_protected_game.exe: *elden_ring
+
+DarkSoulsIII.exe: 
+  Version:
+    0x62ECD80E: &latest v1.15.1.0 #current patch as of 22/12/01
+    latest: *latest
+
+  Configuration:
+    v1.15.1.0: &v1_15_1_0
+      ForceFXAAOn:
+        Type: BinaryPatch
+        Pattern: 8B 42 20 89 41 20 8B 42 24 89 41 24 8B 42 28 89 41 28 8B 42 2C 89 41 2C 8B 42 30 89 41 30 8B 42 34 89 41 34 8B 42 38 89 41 38 8B 42 3C 89 41 3C 8B 42 40 89 41 40 8B 42 44 89 41 44 48 8B C1 C3
+        Offset: 0x00
+        Assembly: |
+          mov byte ptr [rcx+0x20],0x1
+          mov byte ptr [rdx+0x20],0x1
+          nop
+
+DarkSoulsII.exe:
+  Version:
+    0x6322EF1D: v1.0.3.0 #current patch as of 22/12/01
+
+  Configuration:
+    v1.0.3.0:         
