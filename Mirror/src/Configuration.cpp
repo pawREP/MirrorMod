@@ -8,7 +8,7 @@
 Configuration::Configuration(const std::string& gameName, uint32_t versionId) {
     const auto configFilePath = std::filesystem::current_path() / configFile;
     if(!std::filesystem::exists(configFilePath) || !std::filesystem::is_regular_file(configFilePath))
-        throw std::runtime_error("Config file not found");
+        throw std::runtime_error(std::format("Config file not found at {}", configFilePath.string()));
 
     std::ifstream ifs(configFilePath);
     if(!ifs.is_open())
