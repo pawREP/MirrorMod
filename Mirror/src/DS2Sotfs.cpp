@@ -13,14 +13,6 @@ DS2Sotfs::DS2Sotfs(const B3L::ImageView& image, const Configuration& config) {
 
     isMenuOpen = fromPointerDesc<bool>(image, isMenuOpenDesc);
     AAEnabled  = fromPointerDesc<int>(image, AAEnabledDesc);
-
-    // TODO: Port the pathc below
-    //   void* settingFixAddr = (void*)((long long)GetModuleHandle(NULL) + 0xEF6656);
-    //  DWORD old;
-    //  VirtualProtect(settingFixAddr, 9, PAGE_EXECUTE_READWRITE, &old);
-    //  std::vector<unsigned char> patch = { 0xC6, 0x41, 0x20, 0x01, 0xC6, 0x42, 0x20, 0x01, 0x90 };
-    //  memcpy(settingFixAddr, patch.data(), patch.size());
-    //  VirtualProtect(settingFixAddr, 9, old, nullptr);
 }
 
 void DS2Sotfs::map(_XINPUT_STATE* pState) const {
