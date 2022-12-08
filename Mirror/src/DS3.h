@@ -11,12 +11,12 @@
 
 class DS3 : public IXInputMap, public IDInputMap {
 public:
-    explicit DS3(const Configuration& config);
+    DS3(const B3L::ImageView& image, const Configuration& config);
 
     void map(_XINPUT_STATE* pState) const override;
     void map(_DIMOUSESTATE2* state) const override;
     void map(char* keyboardState) const override;
 
 private:
-    B3L::BinaryPatch forceFxaaOnPatch;
+    std::unique_ptr<B3L::BinaryPatch> forceFxaaOnPatch;
 };

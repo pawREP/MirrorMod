@@ -6,6 +6,9 @@
 #include <Windows.h>
 #include <vector>
 
+DS3::DS3(const B3L::ImageView& image, const Configuration& config) {
+    auto desc        = config["ForceFXAAOn"].get<PatchDescriptor>();
+    forceFxaaOnPatch = fromPatchDesc<B3L::BinaryPatch>(image, desc);
 }
 
 void DS3::map(_XINPUT_STATE* state) const {
