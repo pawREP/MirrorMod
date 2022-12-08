@@ -3,8 +3,8 @@
 ---
 EldenRing.exe: &elden_ring
   Version:
-    0x632AF7A8: &latest v1.07  #current patch as of 22/12/01
-    latest: *latest
+    0x632AF7A8: &EldenRing_latest v1.07  #current patch as of 22/12/01
+    latest: *EldenRing_latest
 
   Configuration:
     v1.07: &v1_07
@@ -48,8 +48,8 @@ start_protected_game.exe: *elden_ring
 
 DarkSoulsIII.exe: 
   Version:
-    0x62ECD80E: &latest v1.15.1.0 #current patch as of 22/12/01
-    latest: *latest
+    0x62ECD80E: &DarkSoulsIII_latest v1.15.1.0 #current patch as of 22/12/01
+    latest: *DarkSoulsIII_latest
 
   Configuration:
     v1.15.1.0: &v1_15_1_0
