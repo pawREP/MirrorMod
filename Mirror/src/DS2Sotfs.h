@@ -17,5 +17,5 @@ public:
 
 private:
     B3L::DeepPointer<bool> isMenuOpen;
-    B3L::DeepPointer<int> AAEnabled;
+    mutable B3L::DeepPointer<int> AAEnabled;
 };

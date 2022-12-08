@@ -30,5 +30,6 @@ void DS2Sotfs::map(_DIMOUSESTATE2* state) const {
 }
 
 void DS2Sotfs::map(char* keyboardState) const {
+    AAEnabled.set(1);
     DInputUtil::mirrorWasdX(keyboardState);
 }
