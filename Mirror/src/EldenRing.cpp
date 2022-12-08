@@ -24,13 +24,13 @@ EldenRing::EldenRing(const B3L::ImageView& image, const Configuration& config) {
 
     const auto menuStatePtrDesc = config["MenuState"].get<DeepPointerDescriptor>();
     const auto isInGamePtrDesc  = config["IsInGame"].get<DeepPointerDescriptor>();
-    const auto enemyHpPatchDesc = config["EnemyHPBarPatch"].get<InlinePatchDescriptor>();
-    const auto lockonPatchDesc  = config["LockonPatch"].get<InlinePatchDescriptor>();
+    const auto enemyHpPatchDesc = config["EnemyHPBarPatch"].get<PatchDescriptor>();
+    const auto lockonPatchDesc  = config["LockonPatch"].get<PatchDescriptor>();
 
-    menuState    = fromPatchDesc<uint32_t>(image, menuStatePtrDesc);
-    isInGame     = fromPatchDesc<bool>(image, isInGamePtrDesc);
-    enemyHpPatch = fromPatchDesc(image, enemyHpPatchDesc);
-    lockonPatch  = fromPatchDesc(image, lockonPatchDesc);
+    menuState    = fromPointerDesc<uint32_t>(image, menuStatePtrDesc);
+    isInGame     = fromPointerDesc<bool>(image, isInGamePtrDesc);
+    enemyHpPatch = fromPatchDesc<B3L::InlinePatch>(image, enemyHpPatchDesc);
+    lockonPatch  = fromPatchDesc<B3L::InlinePatch>(image, lockonPatchDesc);
 
     enemyHpPatch->enable();
     lockonPatch->enable();

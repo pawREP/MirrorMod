@@ -7,22 +7,42 @@
 #include <B3L/AOBScanner.h>
 #include <B3L/DeepPointer.h>
 
-struct InlinePatchDescriptor {
+struct PatchDescriptor {
     int64_t offset{};
     std::optional<B3L::AOBPattern> pattern;
     std::optional<std::string> assembly;
     std::optional<std::vector<uint8_t>> bytes;
 };
 
-std::unique_ptr<B3L::InlinePatch> fromPatchDesc(const B3L::ImageView& image, const InlinePatchDescriptor& desc);
+template <typename PatchType>
+std::unique_ptr<PatchType> fromPatchDesc(const B3L::ImageView& image, const PatchDescriptor& desc) {
+    intptr_t target = 0;
+
+    if(desc.pattern) {
+        auto match = ModuleScanner::find(image, desc.pattern.value());
+        if(!match)
+            throw std::runtime_error("Failed to find PatchDescriptor pattern");
+        target = match.value() + desc.offset;
+    } else {
+        target = image.baseAddress() + desc.offset;
+    }
+
+    if(desc.bytes)
+        throw std::runtime_error("Bytes unsupported.");
+
+    assert(desc.assembly);
+
+    return std::make_unique<PatchType>(B3L::rcast<uint8_t*>(target), desc.assembly.value());
+}
+
 
 NLOHMANN_JSON_NAMESPACE_BEGIN
 template <>
-struct adl_serializer<InlinePatchDescriptor> {
-    static void from_json(const json& j, InlinePatchDescriptor& desc) {
+struct adl_serializer<PatchDescriptor> {
+    static void from_json(const json& j, PatchDescriptor& desc) {
 
         if(!j.contains("Offset") || !j["Offset"].is_number_integer())
-            throw std::runtime_error("adl_serializer<InlinePatchDescriptor>: Offset key missing or invalid");
+            throw std::runtime_error("adl_serializer<PatchDescriptor>: Offset key missing or invalid");
 
         desc.offset = j["Offset"].get<int64_t>();
 
@@ -39,14 +59,14 @@ struct adl_serializer<InlinePatchDescriptor> {
             if(!bytesStr.empty()) {
                 auto bytes = B3L::parseByteArrayString(bytesStr);
                 if(!bytes)
-                    throw std::runtime_error("adl_serializer<InlinePatchDescriptor>: invalid byte string");
+                    throw std::runtime_error("adl_serializer<PatchDescriptor>: invalid byte string");
 
                 desc.bytes = bytes.value();
             }
         }
 
         if(!desc.assembly && !desc.bytes) // Need at least one
-            throw std::runtime_error("adl_serializer<InlinePatchDescriptor>: neither assembly nor bytes key present");
+            throw std::runtime_error("adl_serializer<PatchDescriptor>: neither assembly nor bytes key present");
     }
 };
 NLOHMANN_JSON_NAMESPACE_END
