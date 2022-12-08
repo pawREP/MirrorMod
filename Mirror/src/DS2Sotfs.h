@@ -9,7 +9,7 @@
 
 class DS2Sotfs : public IXInputMap, public IDInputMap {
 public:
-    DS2Sotfs([[maybe_unused]] const B3L::ImageView& image, [[maybe_unused]] const Configuration& config);
+    DS2Sotfs(const B3L::ImageView& image, const Configuration& config);
 
     void map(_XINPUT_STATE* pState) const override;
     void map(_DIMOUSESTATE2* state) const override;
