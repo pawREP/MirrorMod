@@ -1,40 +1,42 @@
 #include "DS2Sotfs.h"
 #include "B3L/DeepPointer.h"
 #include "B3L/Process.h"
+#include "DInputUtil.h"
+#include "DeepPointerDeserializer.h"
 #include "XInputUtil.h"
 #include <Windows.h>
 #include <vector>
 
-namespace DS2Sotfs {
+DS2Sotfs::DS2Sotfs(const B3L::ImageView& image, const Configuration& config) {
+    const auto isMenuOpenDesc = config["IsMenuOpen"].get<DeepPointerDescriptor>();
+    const auto AAEnabledDesc  = config["AAEnabled"].get<DeepPointerDescriptor>();
 
-    intptr_t XInputGetStateOffset = 0x1a636ac;
-    // DeepPointer isMenuOpenDp{ (intptr_t)GetModuleHandle(NULL), std::initializer_list{ 0x160B8D0, 0x22E0, 0x10, 0x08 } };
-    B3L::DeepPointer<bool> isMenuOpenDp{ B3L::getModuleBaseAddress(), { 0x160B8D0, 0x22E0, 0x10, 0x08 } };
-    B3L::DeepPointer<int> AAEnabled{ B3L::getModuleBaseAddress(), { 0x166C1D8, 0x40, 0xCC8 } };
+    isMenuOpen = fromPointerDesc<bool>(image, isMenuOpenDesc);
+    AAEnabled  = fromPointerDesc<int>(image, AAEnabledDesc);
 
-    void patch() {
+    // TODO: Port the pathc below
+    //   void* settingFixAddr = (void*)((long long)GetModuleHandle(NULL) + 0xEF6656);
+    //  DWORD old;
+    //  VirtualProtect(settingFixAddr, 9, PAGE_EXECUTE_READWRITE, &old);
+    //  std::vector<unsigned char> patch = { 0xC6, 0x41, 0x20, 0x01, 0xC6, 0x42, 0x20, 0x01, 0x90 };
+    //  memcpy(settingFixAddr, patch.data(), patch.size());
+    //  VirtualProtect(settingFixAddr, 9, old, nullptr);
+}
 
-        // void* settingFixAddr = (void*)((long long)GetModuleHandle(NULL) + 0xEF6656);
-        // DWORD old;
-        // VirtualProtect(settingFixAddr, 9, PAGE_EXECUTE_READWRITE, &old);
-        // std::vector<unsigned char> patch = { 0xC6, 0x41, 0x20, 0x01, 0xC6, 0x42, 0x20, 0x01, 0x90 };
-        // memcpy(settingFixAddr, patch.data(), patch.size());
-        // VirtualProtect(settingFixAddr, 9, old, nullptr);
-    }
+void DS2Sotfs::map(_XINPUT_STATE* pState) const {
+    XInputUtil::mirrorLeftStickX(pState);
 
-    bool isMenuOpen() {
-        AAEnabled.set(1);
-        return isMenuOpenDp.getOr(true);
-    }
+    if(isMenuOpen.getOr(false))
+        return;
 
-    void transformInput(XINPUT_STATE* state) {
-        XInputUtil::mirrorLeftStickX(state);
+    XInputUtil::mirrorTiggers(pState);
+    XInputUtil::mirrorBumpers(pState);
+}
 
-        if(isMenuOpen())
-            return;
+void DS2Sotfs::map(_DIMOUSESTATE2* state) const {
+    DInputUtil::mirrorMouseX(state);
+}
 
-        XInputUtil::mirrorTiggers(state);
-        XInputUtil::mirrorBumpers(state);
-    }
-
-} // namespace DS2Sotfs
+void DS2Sotfs::map(char* keyboardState) const {
+    DInputUtil::mirrorWasdX(keyboardState);
+}
