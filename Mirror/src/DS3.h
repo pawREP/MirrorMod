@@ -1,13 +1,12 @@
 #pragma once
-#include <Windows.h>
-#include <Xinput.h>
-#include <cinttypes>
-
-#include "B3L/BinaryPatch.h"
+#include "B3L/InlinePatch.h"
+#include "B3L/DeepPointer.h"
 #include "Configuration.h"
 #include "DInputHook.h"
 #include "XInputHook.h"
 #include <Windows.h>
+#include <Xinput.h>
+#include <cinttypes>
 
 class DS3 : public IXInputMap, public IDInputMap {
 public:
@@ -18,5 +17,5 @@ public:
     void map(char* keyboardState) const override;
 
 private:
-    std::unique_ptr<B3L::BinaryPatch> forceFxaaOnPatch;
+    mutable B3L::DeepPointer<int> fxaaSetting;
 };

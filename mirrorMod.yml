@@ -53,14 +53,13 @@ DarkSoulsIII.exe:
 
   Configuration:
     v1.15.1.0: &v1_15_1_0
-      ForceFXAAOn:
-        Type: BinaryPatch
-        Pattern: 8B 42 20 89 41 20 8B 42 24 89 41 24 8B 42 28 89 41 28 8B 42 2C 89 41 2C 8B 42 30 89 41 30 8B 42 34 89 41 34 8B 42 38 89 41 38 8B 42 3C 89 41 3C 8B 42 40 89 41 40 8B 42 44 89 41 44 48 8B C1 C3
-        Offset: 0x00
-        Assembly: |
-          mov byte ptr [rcx+0x20],0x1
-          mov byte ptr [rdx+0x20],0x1
-          nop
+      FXAASetting:
+        Type: DeepPointer
+        Pattern: 
+          Bytes: 88 47 62 48 8B 0D ?? ?? ?? ?? 48 85 C9
+          Offset: 6
+        Offsets: [ 0x88 ] 
+          
 
 DarkSoulsII.exe:
   Version:
