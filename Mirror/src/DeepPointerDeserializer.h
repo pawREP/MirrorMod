@@ -14,7 +14,7 @@ struct DeepPointerDescriptor {
 };
 
 template <typename T>
-B3L::DeepPointer<T> fromPatchDesc(const B3L::ImageView& image, const DeepPointerDescriptor& desc) {
+B3L::DeepPointer<T> fromPointerDesc(const B3L::ImageView& image, const DeepPointerDescriptor& desc) {
     std::vector<int> offsets = desc.offsets;
 
     if(desc.pattern) {
