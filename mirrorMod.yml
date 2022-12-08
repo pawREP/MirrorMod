@@ -60,10 +60,23 @@ DarkSoulsIII.exe:
           Offset: 6
         Offsets: [ 0x88 ] 
           
-
 DarkSoulsII.exe:
   Version:
-    0x6322EF1D: v1.0.3.0 #current patch as of 22/12/01
-
+    0x6322EF1D: &DarkSoulsII_latest v1.0.3.0 #current patch as of 22/12/01
+    latest: *DarkSoulsII_latest
+    
   Configuration:
     v1.0.3.0:         
+        IsMenuOpen:
+          Type: DeepPointer
+          Pattern: # Pattern points to GameManagerImp singleton
+            Bytes: 48 83 EC 20 89 91 C0 00 00 00 48 8B 05
+            Offset: 0x0D
+          Offsets: [ 0x22E0, 0x10, 0x08 ] 
+        AAEnabled:
+          Type: DeepPointer
+          Pattern: # Pattern points to MainApp singleton
+            Bytes: 49 89 86 FC 0C 00 00 45 38 A6 B4 0C 00 00 75 18 48 8B 0D
+            Offset: 0x13
+          Offsets: [ 0x40, 0xCC8 ] 
+          
