@@ -6,7 +6,7 @@
 
 class DSR : public IXInputMap, public IDInputMap {
 public:
-    explicit DSR([[maybe_unused]] const Configuration& config) {
+    explicit DSR([[maybe_unused]] const B3L::ImageView& image, [[maybe_unused]] const Configuration& config){
 
     };
 
