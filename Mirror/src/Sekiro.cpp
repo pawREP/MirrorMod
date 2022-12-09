@@ -1,10 +1,15 @@
 #include "Sekiro.h"
+#include "DInputUtil.h"
+#include "XInputUtil.h"
 
-intptr_t XInputGetStateOffset = 0x2929BF8;
-
-void Sekrio::patch() {
+void Sekiro::map(_XINPUT_STATE* pState) const {
+    XInputUtil::mirrorLeftStickX(pState);
 }
 
-void Sekrio::transformInput(XINPUT_STATE* state) {
-    UNREFERENCED_PARAMETER(state);
+void Sekiro::map(_DIMOUSESTATE2* state) const {
+    DInputUtil::mirrorMouseX(state);
+}
+
+void Sekiro::map(char* keyboardState) const {
+    DInputUtil::mirrorWasdX(keyboardState);
 }
