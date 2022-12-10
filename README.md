@@ -10,15 +10,13 @@ This mod allows you to play recent From Software titles on a mirrored map.
 | ------                | ---       | ------                                       |
 | Elden Ring            | :heavy_check_mark:        | Full support                                 |
 | Sekiro                | :heavy_check_mark:        | Full support                                 |
-| Dark Souls III        | :heavy_check_mark:        | Supported with minor visual issues[^1]       |
+| Dark Souls III        | :heavy_check_mark:        | Full support       |
 | Dark Souls II Sotfs   | :heavy_check_mark:        | Full support                                 |
 | Dark Souls II         | :heavy_minus_sign:        | Building from source temporarily unsupported |
 | Dark Souls Remastered | :heavy_minus_sign:        | Building from source temporarily unsupported | 
 | Dark Souls Ptde       | :x:                       | No current or planned support                | 
 | Demon's Souls         | :x:                       | No current or planned support                | 
 | Bloodborne            | :x:                       | No current or planned support                | 
-
-[^1]: Lock-on dot and small enemy HP bars are not aligned correctly. Some bloom effects are misaligned. 
 
 ## Build instructions:
  ### DINPUT8.dll / MirrorMod.dll:
