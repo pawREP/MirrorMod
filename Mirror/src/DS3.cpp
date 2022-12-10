@@ -7,8 +7,8 @@
 #include <vector>
 
 DS3::DS3(const B3L::ImageView& image, const Configuration& config) {
-    auto desc = config["FXAASetting"].get<DeepPointerDescriptor>();
-    fxaaSetting = fromPointerDesc<int>(image, desc);
+    const auto desc = config["FXAASetting"].get<DeepPointerDescriptor>();
+    fxaaSetting     = fromPointerDesc<int>(image, desc);
 }
 
 void DS3::map(_XINPUT_STATE* state) const {
