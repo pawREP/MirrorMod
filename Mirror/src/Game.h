@@ -12,7 +12,7 @@ using Game = DS2Sotfs;
 #elif defined(BUILD_DSR)
 #include "DSR.h"
 using Game = DSR;
-#elif defined(BUILD_SEKRIO)
+#elif defined(BUILD_SEKIRO)
 #include "Sekiro.h"
 using Game = Sekiro;
 #endif
