@@ -1,7 +1,6 @@
 #include "DS3.h"
 #include "B3L/AOBScanner.h"
 #include "DInputUtil.h"
-#include "InlinePatchDeserializer.h"
 #include "DeepPointerDeserializer.h"
 #include "XInputUtil.h"
 #include <Windows.h>
