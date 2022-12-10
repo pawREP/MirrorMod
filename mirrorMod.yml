@@ -79,4 +79,22 @@ DarkSoulsII.exe:
             Bytes: 49 89 86 FC 0C 00 00 45 38 A6 B4 0C 00 00 75 18 48 8B 0D
             Offset: 0x13
           Offsets: [ 0x40, 0xCC8 ] 
-          
+
+sekiro.exe:
+  Version:
+    0x5FA3E066: &Sekiro_latest v1.6.0.0 #current patch as of 22/12/10
+    latest: *Sekiro_latest
+    
+  Configuration:
+    v1.6.0.0:         
+        PatchUI: # Patches the UI so movable elements such as lock-on appear correctly.
+          Type: InlinePatch
+          Pattern: 0F 29 33 49 8B 73 18 48 8B C3 49 8B 5B 10
+          Offset: 0x00
+          Assembly: |
+            push rbx
+            mov rbx, 0x780
+            cvtsi2ss xmm5, rbx
+            subss xmm5, xmm6
+            movss xmm6, xmm5
+            pop rbx
