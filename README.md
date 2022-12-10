@@ -6,17 +6,17 @@ This mod allows you to play recent From Software titles on a mirrored map.
 
 ## Compatibility:
 
-| Game                  | Support   | Notes                                        |
-| ------                | ---       | ------                                       |
-| Elden Ring            | :heavy_check_mark:        | Full support                                 |
-| Sekiro                | :heavy_check_mark:        | Full support                                 |
-| Dark Souls III        | :heavy_check_mark:        | Full support       |
-| Dark Souls II Sotfs   | :heavy_check_mark:        | Full support                                 |
-| Dark Souls II         | :heavy_minus_sign:        | Building from source temporarily unsupported |
-| Dark Souls Remastered | :heavy_minus_sign:        | Building from source temporarily unsupported | 
-| Dark Souls Ptde       | :x:                       | No current or planned support                | 
-| Demon's Souls         | :x:                       | No current or planned support                | 
-| Bloodborne            | :x:                       | No current or planned support                | 
+| Game                  | Support                   | Notes                           |
+| --------------------- | ------------------------- | ------------------------------- |
+| Elden Ring            | :heavy_check_mark:        | Full support                    |
+| Sekiro                | :heavy_check_mark:        | Full support                    |
+| Dark Souls III        | :heavy_check_mark:        | Full support                    |
+| Dark Souls II Sotfs   | :heavy_check_mark:        | Full support                    |
+| Dark Souls II         | :x:                       | Currently unsupported           |
+| Dark Souls Remastered | :heavy_minus_sign:        | Limited support                 | 
+| Dark Souls Ptde       | :x:                       | Currently unsupported           | 
+| Demon's Souls         | :x:                       | No current or planned support   | 
+| Bloodborne            | :x:                       | No current or planned support   | 
 
 ## Build instructions:
  ### DINPUT8.dll / MirrorMod.dll:
