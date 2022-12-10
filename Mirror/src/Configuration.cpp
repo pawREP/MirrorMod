@@ -20,7 +20,7 @@ Configuration::Configuration(const std::string& gameName, uint32_t versionId) {
     root = nlohmann::json::parse(buffer.str());
 
     if(!root.contains(gameName))
-        throw std::runtime_error("Game name not found");
+        throw std::runtime_error(std::format("Game {} not found", gameName));
     if(!root[gameName].contains("Version"))
         throw std::runtime_error("Version not found");
 
