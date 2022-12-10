@@ -9,7 +9,7 @@ This mod allows you to play recent From Software titles on a mirrored map.
 | Game                  | Support   | Notes                                        |
 | ------                | ---       | ------                                       |
 | Elden Ring            | :heavy_check_mark:        | Full support                                 |
-| Sekiro                | :heavy_minus_sign:        | Currently no support but planned             |
+| Sekiro                | :heavy_check_mark:        | Full support                                 |
 | Dark Souls III        | :heavy_check_mark:        | Supported with minor visual issues[^1]       |
 | Dark Souls II Sotfs   | :heavy_check_mark:        | Full support                                 |
 | Dark Souls II         | :heavy_minus_sign:        | Building from source temporarily unsupported |
