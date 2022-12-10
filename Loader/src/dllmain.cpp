@@ -9,24 +9,22 @@
 
 namespace {
 
-    using GetSystemTimeAsFileTime_t     = void (*)(LPFILETIME lpSystemTimeAsFileTime);
-    using GetSystemTimeAsFileTimeHook_t = B3L::IatHook<GetSystemTimeAsFileTime_t>;
+    using GetCommandLineW_t     = LPWSTR (*)();
+    using GetCommandLineWHook_t = B3L::IatHook<GetCommandLineW_t>;
 
-    std::unique_ptr<DInput8Bridge> bridge                           = nullptr;
-    std::unique_ptr<GetSystemTimeAsFileTimeHook_t> initCallbackHook = nullptr;
+    std::unique_ptr<DInput8Bridge> bridge                   = nullptr;
+    std::unique_ptr<GetCommandLineWHook_t> initCallbackHook = nullptr;
 
     HMODULE mirrorModModule{};
 
-    // This function is called by the host process after loading the dll but before WinMain is entered in the host. Since DllMain
-    // is serialized by the operating system there are major restrictions on what can be safely done in DllMain. Non-trivial initialization work should therefor be deferred to this function.
-    void initCallback(LPFILETIME lpSystemTimeAsFileTime) {
+    LPWSTR initCallback() {
         B3L::ScopeExit _([] { initCallbackHook.reset(nullptr); }); // Remove hook after initial call
 
         auto mirrorInit = reinterpret_cast<void (*)(void)>(GetProcAddress(mirrorModModule, "init"));
         assert(mirrorInit);
         mirrorInit();
 
-        return GetSystemTimeAsFileTime(lpSystemTimeAsFileTime);
+        return GetCommandLineW();
     }
 
 } // namespace
@@ -45,15 +43,14 @@ BOOL APIENTRY DllMain(HMODULE Module, DWORD ReasonForCall, LPVOID Reserved) {
         mirrorModModule = LoadLibraryA("MirrorMod.dll");
         assert(mirrorModModule);
 
-        // GetSystemTimeAsFileTime is hooked since this API is called as part of __secure_init_cookie before main is entered.
-        // This callback allows initialization of loaded dlls without gambling with the limitations of DllMain that come as a result of the loader lock.
+        // GetCommandLineW is hooked since this API is called early into main and allows us to initialize early on and 
+        // safely without gambling with the limitations of DllMain that come as a result of the loader lock.
         try {
-            initCallbackHook =
-            std::make_unique<GetSystemTimeAsFileTimeHook_t>("KERNEL32.dll", "GetSystemTimeAsFileTime", &initCallback);
+            initCallbackHook = std::make_unique<GetCommandLineWHook_t>("KERNEL32.dll", "GetCommandLineW", &initCallback);
             initCallbackHook->enable();
         } catch(...) {
             MessageBoxA(HWND{},
-                        "Failed to set 'GetSystemTimeAsFileTime' based initialization hook. Application might "
+                        "Failed to set 'GetCommandLineW' based initialization hook. Application might "
                         "not be compatible with current hooking setup.",
                         "Error", UINT{});
         }
