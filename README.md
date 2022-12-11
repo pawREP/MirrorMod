@@ -13,7 +13,7 @@ This mod allows you to play recent From Software titles on a mirrored map.
 | Dark Souls III        | :heavy_check_mark:        | Full support                    |
 | Dark Souls II Sotfs   | :heavy_check_mark:        | Full support                    |
 | Dark Souls II         | :x:                       | Currently unsupported           |
-| Dark Souls Remastered | :heavy_minus_sign:        | Limited support                 | 
+| Dark Souls Remastered | :heavy_check_mark:        | Full support                    | 
 | Dark Souls Ptde       | :x:                       | Currently unsupported           | 
 | Demon's Souls         | :x:                       | No current or planned support   | 
 | Bloodborne            | :x:                       | No current or planned support   | 
