@@ -1,5 +1,6 @@
 #include "DInputHook.h"
 #include "B3L/Numeric.h"
+#include "B3L/Unreachable.h"
 #include "Game.h"
 #include "VTable.h"
 #include <Unknwn.h>
@@ -77,10 +78,9 @@ DInput::~DInput() {
 
     inputMap = nullptr;
 
-    GetKeyboardDeviceStateHook.reset();
-    GetMouseDeviceStateHook.reset();
     DirectInput8CreateDeviceHook.reset();
     DirectInput8CreateHook.reset();
+    GetDeviceStateHooks.clear();
 }
 
 void DInput::setInputMap(IDInputMap* map) {
@@ -97,22 +97,13 @@ HRESULT DInput::CreateDevice(IDirectInput* this_, REFGUID rguid, LPDIRECTINPUTDE
 
     auto hr = DirectInput8CreateDeviceHook->invokeOriginal(this_, rguid, lplpDirectInputDevice, pUnkOuter);
 
-    if(rguid == GUID_SysKeyboard) {
-        if(!GetKeyboardDeviceStateHook) {
-            GetKeyboardDeviceStateHook =
-            std::make_unique<DirectInputDevice8GetDeviceStateHook_t>(*lplpDirectInputDevice,
-                                                                     &VTable<IDirectInputDevice>::GetDeviceState, &GetDeviceState);
-
-            GetKeyboardDeviceStateHook->enable();
-        }
-    } else if(rguid == GUID_SysMouse) {
-        if(!GetMouseDeviceStateHook) {
-            GetMouseDeviceStateHook =
-            std::make_unique<DirectInputDevice8GetDeviceStateHook_t>(*lplpDirectInputDevice,
-                                                                     &VTable<IDirectInputDevice>::GetDeviceState, &GetDeviceState);
-
-            GetMouseDeviceStateHook->enable();
-        }
+    // Different devices may share vtables, we have to ensure that we only hook once per table regardless of device. Hooking per unique GUID is not safe.
+    auto vft = *(void**)(*lplpDirectInputDevice);
+    if(!GetDeviceStateHooks.contains(vft)) {
+        GetDeviceStateHooks[vft] =
+        std::make_unique<DirectInputDevice8GetDeviceStateHook_t>(*lplpDirectInputDevice,
+                                                                 &VTable<IDirectInputDevice>::GetDeviceState, &GetDeviceState);
+        GetDeviceStateHooks[vft]->enable();
     }
 
     return hr;
@@ -121,13 +112,14 @@ HRESULT DInput::CreateDevice(IDirectInput* this_, REFGUID rguid, LPDIRECTINPUTDE
 HRESULT DInput::GetDeviceState(IDirectInputDevice* this_, DWORD cbData, LPVOID lpvData) {
     std::lock_guard lock(mut);
 
+    auto vtf = *(void**)(this_);
+    if(!GetDeviceStateHooks.contains(vtf))
+        return this_->GetDeviceState(cbData, lpvData);
+
+    auto hr = GetDeviceStateHooks[vtf]->invokeOriginal(this_, cbData, lpvData);
+
     switch(cbData) {
     case sizeof(DIMOUSESTATE2): {
-        if(!GetMouseDeviceStateHook)
-            return this_->GetDeviceState(cbData, lpvData);
-
-        auto hr = GetMouseDeviceStateHook->invokeOriginal(this_, cbData, lpvData);
-
         DIMOUSESTATE2* state = reinterpret_cast<DIMOUSESTATE2*>(lpvData);
         if(inputMap)
             inputMap->map(state);
@@ -136,11 +128,6 @@ HRESULT DInput::GetDeviceState(IDirectInputDevice* this_, DWORD cbData, LPVOID l
     } break;
 
     case 256: {
-        if(!GetKeyboardDeviceStateHook)
-            return this_->GetDeviceState(cbData, lpvData);
-
-        auto hr = GetKeyboardDeviceStateHook->invokeOriginal(this_, cbData, lpvData);
-
         char* state = reinterpret_cast<char*>(lpvData);
         if(inputMap)
             inputMap->map(state);
@@ -149,8 +136,8 @@ HRESULT DInput::GetDeviceState(IDirectInputDevice* this_, DWORD cbData, LPVOID l
     } break;
 
     default:
-        return {};
-    };
+        unreachable();
+    }
 }
 
 HRESULT DInput::DirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter) {

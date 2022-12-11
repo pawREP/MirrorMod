@@ -3,6 +3,7 @@
 #include "B3L/Unique.h"
 #include <Windows.h>
 #include <dinput.h>
+#include <unordered_map>
 
 class IDInputMap {
 public:
@@ -12,7 +13,7 @@ public:
     virtual void map(char* keyboardState) const;
 };
 
-class DInput { 
+class DInput {
 public:
     DInput();
     ~DInput();
@@ -29,8 +30,7 @@ private:
     using DirectInputDevice8GetDeviceStateHook_t = B3L::VftHook<DirectInputDevice8GetDeviceState_t>;
 
     static HRESULT GetDeviceState(IDirectInputDevice* this_, DWORD cbData, LPVOID lpvData);
-    static inline std::unique_ptr<DirectInputDevice8GetDeviceStateHook_t> GetKeyboardDeviceStateHook = nullptr;
-    static inline std::unique_ptr<DirectInputDevice8GetDeviceStateHook_t> GetMouseDeviceStateHook    = nullptr;
+    static inline std::unordered_map<void*, std::unique_ptr<DirectInputDevice8GetDeviceStateHook_t>> GetDeviceStateHooks;
 
     static HRESULT CreateDevice(IDirectInput* this_, REFGUID rguid, LPDIRECTINPUTDEVICE* lplpDirectInputDevice, LPUNKNOWN pUnkOuter);
     static inline std::unique_ptr<DirectInput8CreateDeviceHook_t> DirectInput8CreateDeviceHook = nullptr;
