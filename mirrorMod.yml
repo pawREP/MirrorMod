@@ -98,3 +98,11 @@ sekiro.exe:
             subss xmm5, xmm6
             movss xmm6, xmm5
             pop rbx
+
+DarkSoulsRemastered.exe:
+  Version:
+    0x6344CA56: &DarkSoulsRemastered_latest v1.0.0.0 # Thursday 15 September 2022
+    latest: *DarkSoulsRemastered_latest
+    
+  Configuration:
+    v1.0.0.0:      
