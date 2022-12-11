@@ -1,7 +1,7 @@
 # Root configuration file to build mirrorMod.json from.
 
 ---
-EldenRing.exe: &elden_ring
+eldenring.exe: &elden_ring
   Version:
     0x632AF7A8: &EldenRing_latest v1.07  #current patch as of 22/12/01
     latest: *EldenRing_latest
