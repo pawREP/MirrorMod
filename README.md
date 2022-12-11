@@ -2,7 +2,12 @@
 
 # Universal Souls Mirror Mod
 
-This mod allows you to play recent From Software titles on a mirrored map. 
+Universal Souls Mirror Mod lets you experience many recent From Software titles on a mirrored map. 
+
+##  [Latest Release](https://github.com/pawREP/MirrorMod/releases/latest)
+
+##  [Installation Instructions](/docs/Installation.md)
+
 
 ## Compatibility:
 
